@@ -1,0 +1,49 @@
+---
+- name: installation of lemp stack
+  hosts: localhost
+  become: yes
+  tasks:
+   #install nginx, mariadb, php
+   - name: install nginx
+     ansible.builtin.dnf:
+       name: nginx
+       state: absent
+
+   - name: install maraidb
+     ansible.builtin.dnf:
+       name: mariadb105-server
+       state: absent
+
+   - name: install php
+     ansible.builtin.dnf:
+       name: 
+        - php
+        - php-fpm
+       state: absent
+# start and enable nginx ,maraidb, php
+   - name: start nginx
+     ansible.builtin.systemd_service:
+       name: nginx
+       state: started
+       enabled: true
+
+   - name: start maraidb
+     ansible.builtin.systemd_service:
+       name: mariadb
+       state: started
+       enabled: true
+  
+   - name: start php
+     ansible.builtin.systemd_service:
+       name: php-fpm
+       state: started
+       enabled: true
+
+  #deploy php page on apache
+   - name: deploy php application
+     ansible.builtin.copy:
+       dest: /usr/share/nginx/html/index.php
+       content: |
+        <?php
+        phpinfo();
+        ?> 

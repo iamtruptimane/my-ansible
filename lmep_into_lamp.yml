@@ -1,0 +1,50 @@
+---
+- name: Switch from lemp to lamp with php
+  hosts: localhost
+  become: yes
+
+  vars:
+    old_web_service: nginx
+    new_web_pkg: httpd
+    new_web_service: httpd
+    db_pkg: mariadb105-server
+    php_pkgs: 
+      - php
+      - php-fpm
+    php_index_file: /var/www/html/index.php   # apache default docroot
+
+  tasks:
+    # Stop and disable nginx
+    - name: stop and disable nginx
+      ansible.builtin.service:
+        name: "{{ old_web_service }}"
+        state: stopped
+        enabled: false
+
+    # Install httpd
+    - name: install httpd
+      ansible.builtin.dnf:
+        name: "{{ new_web_pkg }}"
+        state: present
+
+    # Start and enable httpd
+    - name: start httpd
+      ansible.builtin.service:
+        name: "{{ new_web_service }}"
+        state: started
+        enabled: true
+
+    # Install php (already installed but kept for idempotency)
+    - name: install php and php-fpm
+      ansible.builtin.dnf:
+        name: "{{ php_pkgs }}"
+        state: present
+
+    # Deploy php page for apache
+    - name: deploy php application on apache
+      ansible.builtin.copy:
+        dest: "{{ php_index_file }}"
+        content: |
+          <?php
+          phpinfo();
+          ?>

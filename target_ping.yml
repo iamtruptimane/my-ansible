@@ -1,0 +1,6 @@
+---
+- name: Test connectivity to target server
+  hosts: webserver
+  tasks:
+    - name: Ping the remote server
+      ansible.builtin.ping: {}
