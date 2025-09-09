@@ -1,0 +1,78 @@
+#Deploy LEMP Stack Using Ansible Inventory
+---
+- name: deploy webserver
+  hosts: webserver
+  become: yes
+  vars:
+   web_pkg: nginx
+   php_pkg:
+    - php
+    - php-fpm
+   web_service: nginx
+   php_service: php-fpm
+   php_default_file: /usr/share/nginx/html
+
+  tasks:
+   - name: install nginx
+     ansible.builtin.dnf:
+       name: "{{web_pkg}}"
+       state: present
+   - name: install php
+     ansible.builtin.dnf:
+       name: "{{php_pkg}}"
+       state: present
+   - name: start and enable nginx
+     ansible.builtin.systemd_service:
+       name: "{{web_service}}"
+       state: started
+       enabled: true
+   - name: start and enable php
+     ansible.builtin.systemd_service:
+       name: "{{php_service}}"
+       state: started
+       enabled: true
+   - name: deploy php 
+     ansible.builtin.copy:
+       dest: "{{php_default_file}}/index.php"
+       content: |
+        <?php
+        phpinfo();
+        ?>
+   - name: deploy html 
+     ansible.builtin.copy:
+       dest: "{{php_default_file}}/index.html"
+       content: |
+        <h1>welcome to ansible webserver</h1>
+        <p1>web server is running on {{ inventory_hostname}}</p1>
+
+- name: deploy dbserver
+  hosts: dbserver
+  become: yes
+  vars:
+   db_pkg: mariadb105-server
+   db_service: mariadb
+   db_name: ansible_db
+  
+  tasks:
+   - name: install dbserver
+     ansible.builtin.dnf:
+       name: "{{db_pkg}}"
+       state: present
+
+   - name: start and enable db server
+     ansible.builtin.systemd_service:
+       name: "{{db_service}}"
+       state: started
+       enabled: true
+   - name: create database using mysql command
+     ansible.builtin.shell: |
+       mysql -u root -e "CREATE DATABASE IF NOT EXISTS {{ db_name }};"
+
+
+    
+    
+
+     
+     
+     
+

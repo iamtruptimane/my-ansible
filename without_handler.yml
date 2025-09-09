@@ -1,0 +1,32 @@
+---
+- name: nginx app deployment witout handler
+  hosts: webserver
+  become: yes
+  vars:
+   web_pkg: nginx
+   web_service: nginx
+   nginx_conf_file: /etc/nginx/nginx.conf
+   web_root: /usr/share/nginx/html
+  tasks:
+   - name: install nginx
+     ansible.builtin.dnf:
+      name: "{{web_pkg}}"
+      state: present
+   - name: start and enable nginx
+     ansible.builtin.systemd_service:
+      name: "{{web_service}}"
+      state: started
+      enabled: true
+   - name: add nginx port
+     ansible.builtin.lineinfile:
+      path: "{{nginx_conf_file}}"
+      regexp: '^\s*listen'
+      line: '        listen 80;'
+   - name: deploy html page
+     ansible.builtin.copy:
+      dest: "{{web_root}}/index.html"
+      content: |
+        "<h1> welcome to ansible server running on {{ inventory_hostname }}"
+        
+     
+     
