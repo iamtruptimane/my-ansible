@@ -1,24 +1,22 @@
 ---
-- name: Install and configure httpd
+- name: Install and configure nginx
   hosts: localhost
   become: true
 
   tasks:
-    - name: Install httpd package
+    - name: Install nginx package
       ansible.builtin.dnf:
-        name: httpd
+        name: nginx
         state: present # absent
 
     - name: Start and enable httpd service
       ansible.builtin.systemd:
-        name: httpd
+        name: nginx
         state: started # stopped
         enabled: true # false
 
     - name: Deploy index.html
       ansible.builtin.copy:
-        dest: /var/www/html/index.html
+        dest: /usr/share/nginx/html/index.html
         content: |
-          <h1>Welcome to my http website</h1>
-
-    
+          <h1>Welcome to my nginx website</h1>

@@ -3,10 +3,10 @@
   hosts: localhost
   become: yes
   tasks:
-   #install nginx, mariadb, php
-   - name: install nginx
+   #install httpd, mariadb, php
+   - name: install httpd
      ansible.builtin.dnf:
-       name: nginx
+       name: httpd
        state: present
 
    - name: install maraidb
@@ -19,9 +19,9 @@
        name: 
         - php
         - php-fpm
-       state: present
-# start and enable nginx ,maraidb, php
-   - name: start nginx
+       state: absent
+# start and enable httpd ,maraidb, php
+   - name: start httpd
      ansible.builtin.systemd_service:
        name: nginx
        state: started
@@ -42,8 +42,9 @@
   #deploy php page on apache
    - name: deploy php application
      ansible.builtin.copy:
-       dest: /usr/share/nginx/html/index.php
+       dest: /var/www/html/index.php
        content: |
         <?php
         phpinfo();
         ?> 
+      
