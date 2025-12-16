@@ -1,0 +1,29 @@
+---
+- name: install lemp using optimize code
+  hosts: localhost
+  tasks:
+  - name: install php, nginx, maraidb
+    ansible.builtin.dnf:
+      name: 
+        - nginx
+        - php
+        - php-fpm
+        - mariadb105-server
+      state: present 
+  - name: start and enable php, nginx, maraidb
+    ansible.builtin.systemd:
+      name: "{{ item }}"
+      state: started
+      enabled: true
+    loop: 
+      - nginx
+      - php-fpm
+      - mariadb
+  - name: deploy php test page
+    ansible.builtin.copy:
+      dest: /usr/share/nginx/html/index.php
+      content: |
+          <?php
+          phpinfo();
+          ?>
+       
