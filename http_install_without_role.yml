@@ -1,3 +1,4 @@
+# ansible-galaxy role init httpd -> to create a role
 ---
 - name: install httpd 
   hosts: localhost
