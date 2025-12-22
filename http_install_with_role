@@ -1,3 +1,14 @@
+
+# ansible-galaxy role init httpd -> to create a new role
+# How to push github role to ansible-galaxy 
+   # 1. create account on asnible-galaxy (authenticate with github is compulsory)
+   # 2. push the role to github 
+   # 3. import role to ansible-galaxy -> ansible-galaxy import <github-username> <github-repo-name> --token <ansible-token>
+        # (to create ansible token -> ansible account -> collection-> API token-> load token-> copy token)
+# how to pull the role from ansible galaxy
+   # 1. copy and paste role
+   # 2. cd /root/.ansible
+   # 3. ls -> roles -> isnide this roles folder you will get your role
 ---
 - name: install httpd 
   hosts: localhost

@@ -1,4 +1,5 @@
 # ansible-galaxy role init httpd -> to create a role
+# ansible-galaxy import imatruptimane httpd-role --token <ansible-token> -> to import role
 ---
 - name: install httpd 
   hosts: localhost
