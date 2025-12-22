@@ -1,0 +1,6 @@
+---
+- name: install httpd 
+  hosts: localhost
+  become: yes
+  roles: 
+  - httpd_role  # directory name where all roles files are located 
