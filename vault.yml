@@ -1,0 +1,7 @@
+# openssl rand -base64 32 > .vault_pass.txt -> To create password
+# ansible-vault  -> to get options 
+# ansible-vault encrypt inventory.yml --vault-password-file .valut_pass.txt
+# ansible-vault encrypt inventory.ini --ask-vault-pass -> ask password
+# ansible-vault decrypt inventory.ini --vault-password-file .vault_pass.txt
+#  ansible-vault edit inventory.ini --vault-password-file .vault_pass.txt
+#  ansible-vault view inventory.ini --vault-password-file .vault_pass.txt
